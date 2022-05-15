@@ -16,9 +16,10 @@
          />
 
     <Button
+        android:id="@+id/about_me"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="this is a button"
+        android:text="About Me"
         />
 
 </androidx.appcompat.widget.LinearLayoutCompat>
