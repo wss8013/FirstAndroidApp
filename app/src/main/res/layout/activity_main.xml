@@ -25,4 +25,10 @@
         android:layout_height="wrap_content"
         android:text="About Me"
         />
+    <Button
+        android:id="@+id/clicky"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Clicky Clicky"
+        />
 </androidx.appcompat.widget.LinearLayoutCompat>
