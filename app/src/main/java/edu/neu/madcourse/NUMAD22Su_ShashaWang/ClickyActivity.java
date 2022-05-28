@@ -25,7 +25,6 @@ public class ClickyActivity extends AppCompatActivity {
         buttonD.setOnClickListener(v->setButtonText((Button)v,buttonText ));
         buttonE.setOnClickListener(v->setButtonText((Button)v,buttonText ));
         buttonF.setOnClickListener(v->setButtonText((Button)v,buttonText ));
-
     }
 
     private void setButtonText(Button button,TextView textView ) {
