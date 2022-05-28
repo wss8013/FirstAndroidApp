@@ -62,6 +62,25 @@
         app:layout_constraintStart_toStartOf="@id/c"
         app:layout_constraintTop_toBottomOf="@id/c"
         />
-
+    <TextView
+        android:id="@+id/pressed"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="20dp"
+        app:layout_constraintStart_toStartOf="@id/d"
+        app:layout_constraintTop_toBottomOf="@id/d"
+        android:layout_marginEnd="15dp"
+        android:layout_marginTop="20dp"
+        android:text="Pressed: "
+        />
+    <TextView
+        android:id="@+id/button_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="20dp"
+        app:layout_constraintStart_toEndOf="@id/pressed"
+        app:layout_constraintTop_toTopOf="@id/pressed"
+        android:text="-"
+        />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
