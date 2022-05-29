@@ -19,7 +19,6 @@ public class MainActivity extends AppCompatActivity {
         Button aboutMe = (Button) findViewById(R.id.about_me);
         Button clicky = (Button) findViewById(R.id.clicky);
 
-        EditText edit = (EditText)findViewById(R.id.my_edit);
         aboutMe.setOnClickListener(v -> {
             Context context = getApplicationContext();
             CharSequence text = "Name: Shasha Wang \n Email: wang.shas@northeastern.edu \n";
@@ -31,7 +30,5 @@ public class MainActivity extends AppCompatActivity {
             Intent intent = new Intent(this, ClickyActivity.class);
             startActivity(intent);
         });
-
-
     }
 }
