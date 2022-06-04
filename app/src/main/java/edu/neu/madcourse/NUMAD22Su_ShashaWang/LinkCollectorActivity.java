@@ -3,6 +3,7 @@ package edu.neu.madcourse.NUMAD22Su_ShashaWang;
 import android.os.Bundle;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -35,9 +36,15 @@ public class LinkCollectorActivity extends AppCompatActivity {
             builder.setTitle("Type Link");
             LinearLayout linearLayout = new LinearLayout(this);
             linearLayout.setOrientation(LinearLayout.VERTICAL);
+            final TextView nameTextView = new TextView(this);
+            final TextView linkTextView = new TextView(this);
+            nameTextView.setText("Name");
+            linkTextView.setText("Link");
             final EditText name = new EditText(this);
             final EditText link = new EditText(this);
+            linearLayout.addView(nameTextView);
             linearLayout.addView(name);
+            linearLayout.addView(linkTextView);
             linearLayout.addView(link);
             builder.setView(linearLayout);
             builder.setPositiveButton("OK", (dialog, which) -> {
