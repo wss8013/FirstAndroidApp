@@ -24,12 +24,14 @@ public class LinkCollectorActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_link_collector);
         links = new ArrayList<>();
+        if (savedInstanceState !=null && savedInstanceState.containsKey("links")){
+            links = savedInstanceState.getParcelableArrayList("links");
+        }
         linksRecyclerView = findViewById(R.id.links_recycler_view);
         linksRecyclerView.setHasFixedSize(false);
         LinkAdapter linkAdapter  = new LinkAdapter(links, this);
         linksRecyclerView.setAdapter(linkAdapter);
         linksRecyclerView .setLayoutManager(new LinearLayoutManager(this));
-
         FloatingActionButton addButton = findViewById(R.id.add_alarm_fab);
         addButton.setOnClickListener(v -> {
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -68,5 +70,16 @@ public class LinkCollectorActivity extends AppCompatActivity {
             builder.setNegativeButton("Cancel", (dialog, which) -> dialog.cancel());
             builder.show();
         });
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        outState.putParcelableArrayList("links", new ArrayList<>(links));
+        super.onSaveInstanceState(outState);
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
     }
 }
