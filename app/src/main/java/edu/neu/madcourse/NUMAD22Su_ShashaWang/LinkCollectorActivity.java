@@ -6,6 +6,7 @@ import android.widget.LinearLayout;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
@@ -15,11 +16,15 @@ import java.util.List;
 
 public class LinkCollectorActivity extends AppCompatActivity {
     private List<LinkInfo> links = new ArrayList<>();
+    RecyclerView linksRecyclerView;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_link_collector);
+        linksRecyclerView = findViewById(R.id.links_recycler_view);
+
         FloatingActionButton addButton = findViewById(R.id.add_alarm_fab);
         addButton.setOnClickListener(v -> {
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
