@@ -6,30 +6,21 @@
     android:layout_height="match_parent"
     android:gravity="center"
     android:orientation="vertical"
-    tools:context=".MainActivity">
+    tools:context=".AboutMeActivity">
     <TextView
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:textSize="50dp"
-        android:text="Hello World!"
-         />
-    <Button
-        android:id="@+id/about_me"
+        android:textSize="20dp"
+        android:text="Name: Shasha Wang"
+        />
+    <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="About Me"
+        android:gravity="center"
+        android:textSize="20dp"
+        android:text="Email: wang.shas@northeastern.edu"
         />
-    <Button
-        android:id="@+id/clicky"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Clicky Clicky"
-        />
-    <Button
-        android:id="@+id/link_collector"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Link Collector"
-        />
+
+
 </androidx.appcompat.widget.LinearLayoutCompat>

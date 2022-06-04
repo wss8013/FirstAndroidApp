@@ -25,6 +25,15 @@
             android:name=".ClickyActivity"
             android:exported="true">
         </activity>
+        <activity
+            android:name=".AboutMeActivity"
+            android:exported="true">
+        </activity>
+        <activity
+            android:name=".LinkCollectorActivity"
+            android:exported="true">
+        </activity>
+
     </application>
 
 </manifest>

@@ -16,18 +16,22 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Button aboutMe = (Button) findViewById(R.id.about_me);
-        Button clicky = (Button) findViewById(R.id.clicky);
+        Button aboutMe =  findViewById(R.id.about_me);
+        Button clicky = findViewById(R.id.clicky);
+        Button linkCollector = findViewById(R.id.link_collector);
 
         aboutMe.setOnClickListener(v -> {
-            Context context = getApplicationContext();
-            CharSequence text = "Name: Shasha Wang \n Email: wang.shas@northeastern.edu \n";
-            int duration = Toast.LENGTH_SHORT;
-            Toast toast = Toast.makeText(context, text, duration);
-            toast.show();
+            Intent intent = new Intent(this, AboutMeActivity.class);
+            startActivity(intent);
+
         });
         clicky.setOnClickListener(v->{
             Intent intent = new Intent(this, ClickyActivity.class);
+            startActivity(intent);
+        });
+
+        linkCollector.setOnClickListener(v->{
+            Intent intent = new Intent(this, LinkCollectorActivity.class);
             startActivity(intent);
         });
     }
