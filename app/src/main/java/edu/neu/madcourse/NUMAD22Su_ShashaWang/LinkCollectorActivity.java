@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class LinkCollectorActivity extends AppCompatActivity {
-    private List<String> links = new ArrayList<>();
+    private List<LinkInfo> links = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,10 +32,18 @@ public class LinkCollectorActivity extends AppCompatActivity {
             linearLayout.addView(link);
             builder.setView(linearLayout);
             builder.setPositiveButton("OK", (dialog, which) -> {
-                links.add(name.getText().toString());
-                System.out.println("name aaaaa " + name.getText()+ "  link bababababababa "+ link.getText());
+                String nameText = name.getText().toString();
+                String linkText = link.getText().toString();
+                String snackBarText = "";
+                if (nameText.isEmpty() || linkText.isEmpty()) {
+                    snackBarText = " Link or name must not be empty";
+                } else {
+                    snackBarText = "Link successfully added";
+                    links.add(new LinkInfo(nameText,linkText));
+                }
+
                 Snackbar snackbar = Snackbar.make(findViewById(R.id.link_collector_layout),
-                        "Link successfully added ", Snackbar.LENGTH_LONG);
+                        snackBarText, Snackbar.LENGTH_LONG);
                 snackbar.setAction("Dismiss", v1 -> {
                     snackbar.dismiss();
                 });
