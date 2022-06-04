@@ -16,18 +16,19 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class LinkCollectorActivity extends AppCompatActivity {
-    private List<LinkInfo> links = new ArrayList<>();
+    private List<LinkInfo> links;
     RecyclerView linksRecyclerView;
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_link_collector);
+        links = new ArrayList<>();
         linksRecyclerView = findViewById(R.id.links_recycler_view);
-        linksRecyclerView.setHasFixedSize(true);
+        linksRecyclerView.setHasFixedSize(false);
+        LinkAdapter linkAdapter  = new LinkAdapter(links, this);
+        linksRecyclerView.setAdapter(linkAdapter);
         linksRecyclerView .setLayoutManager(new LinearLayoutManager(this));
-        linksRecyclerView.setAdapter(new LinkAdapter(links, this));
+
         FloatingActionButton addButton = findViewById(R.id.add_alarm_fab);
         addButton.setOnClickListener(v -> {
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -48,15 +49,14 @@ public class LinkCollectorActivity extends AppCompatActivity {
                 } else {
                     snackBarText = "Link successfully added";
                     links.add(new LinkInfo(nameText,linkText));
+                    linkAdapter.notifyDataSetChanged();
                 }
-
                 Snackbar snackbar = Snackbar.make(findViewById(R.id.link_collector_layout),
                         snackBarText, Snackbar.LENGTH_LONG);
                 snackbar.setAction("Dismiss", v1 -> {
                     snackbar.dismiss();
                 });
                 snackbar.show();
-
             });
             builder.setNegativeButton("Cancel", (dialog, which) -> dialog.cancel());
             builder.show();

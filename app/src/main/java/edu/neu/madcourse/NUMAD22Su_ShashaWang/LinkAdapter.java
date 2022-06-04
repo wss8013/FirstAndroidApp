@@ -12,12 +12,6 @@ import java.util.List;
 public class LinkAdapter extends RecyclerView.Adapter<LinkViewHolder> {
     private final List<LinkInfo> links;
     private final Context context;
-
-    /**
-     * Creates a PersonAdapter with the provided arraylist of Person objects.
-     * @param links    arraylist of LinkInfo.
-     * @param context   context of the activity used for inflating layout of the viewholder.
-     */
     public LinkAdapter(List<LinkInfo> links, Context context) {
         this.links = links;
         this.context = context;
@@ -40,6 +34,7 @@ public class LinkAdapter extends RecyclerView.Adapter<LinkViewHolder> {
         // Returns the size of the recyclerview that is the list of the arraylist.
         return links.size();
     }
+
 
 
 }
