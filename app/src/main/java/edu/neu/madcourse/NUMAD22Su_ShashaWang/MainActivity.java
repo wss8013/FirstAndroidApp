@@ -19,6 +19,7 @@ public class MainActivity extends AppCompatActivity {
         Button aboutMe =  findViewById(R.id.about_me);
         Button clicky = findViewById(R.id.clicky);
         Button linkCollector = findViewById(R.id.link_collector);
+        Button findPrime = findViewById(R.id.prime);
 
         aboutMe.setOnClickListener(v -> {
             Intent intent = new Intent(this, AboutMeActivity.class);
@@ -32,6 +33,11 @@ public class MainActivity extends AppCompatActivity {
 
         linkCollector.setOnClickListener(v->{
             Intent intent = new Intent(this, LinkCollectorActivity.class);
+            startActivity(intent);
+        });
+
+        findPrime.setOnClickListener(v->{
+            Intent intent = new Intent(this, FindPrimeActivity.class);
             startActivity(intent);
         });
     }

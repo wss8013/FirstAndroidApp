@@ -8,6 +8,7 @@
         <entry key="app/src/main/res/drawable/ic_launcher_sw_foreground_sw.xml" value="0.113" />
         <entry key="app/src/main/res/layout/activity_about_me.xml" value="0.1078125" />
         <entry key="app/src/main/res/layout/activity_clicky.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/activity_find_prime.xml" value="0.1078125" />
         <entry key="app/src/main/res/layout/activity_link_collector.xml" value="0.10520833333333333" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.1" />
         <entry key="app/src/main/res/layout/link_item.xml" value="0.1078125" />
