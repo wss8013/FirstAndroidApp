@@ -38,4 +38,10 @@
         android:layout_height="wrap_content"
         android:text="Find Prime"
         />
+    <Button
+        android:id="@+id/location"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Location"
+        />
 </androidx.appcompat.widget.LinearLayoutCompat>
