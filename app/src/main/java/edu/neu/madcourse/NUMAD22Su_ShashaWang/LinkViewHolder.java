@@ -34,6 +34,7 @@ public class LinkViewHolder  extends RecyclerView.ViewHolder {
         linkTV.setClickable(true);
         linkTV.setOnClickListener(new LinkListener());
     }
+
     public class LinkListener implements View.OnClickListener{
         @Override
         public void onClick(View v) {
