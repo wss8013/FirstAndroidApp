@@ -3,10 +3,12 @@ package edu.neu.madcourse.NUMAD22Su_ShashaWang;
 import android.Manifest;
 import android.content.pm.PackageManager;
 import android.location.Location;
-import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Looper;
+import android.view.View;
+import android.widget.CheckBox;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
@@ -23,13 +25,16 @@ public class LocationActivity extends AppCompatActivity {
     private TextView currentLatitude;
     private TextView currentLongitude;
     private TextView travelDistance;
-    private LocationManager locationManager;
     private FusedLocationProviderClient fusedLocationClient;
     private double latitudeValue;
     private double longitudeValue;
     private double distanceValue;
     private LocationCallback locationCallback;
     private LocationRequest locationRequest;
+    private CheckBox highPrecisionCheckBox;
+    private int locationUpdateInterval = 6000;
+    private int fastestInterval = 500;
+    private int precisionCode = Priority.PRIORITY_BALANCED_POWER_ACCURACY;
 
 
     @Override
@@ -41,8 +46,8 @@ public class LocationActivity extends AppCompatActivity {
         travelDistance = findViewById(R.id.total_distance);
         latitudeValue = 0.0f;
         longitudeValue = 0.0f;
+        highPrecisionCheckBox = findViewById(R.id.high_precision);
         if (savedInstanceState != null && savedInstanceState.containsKey("distance")) {
-            System.out.println(" shasha saving instance value ");
             distanceValue = savedInstanceState.getDouble("distance");
         } else {
             distanceValue = 0.0f;
@@ -50,39 +55,40 @@ public class LocationActivity extends AppCompatActivity {
         currentLatitude.setText("Current latitude: " + latitudeValue);
         currentLongitude.setText("current longitude: " + longitudeValue);
         travelDistance.setText("total_distance: " + String.format("%.2f", distanceValue) + "M");
-        if (ActivityCompat.checkSelfPermission(this,
-                Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
-                && ActivityCompat
-                .checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) !=
-                PackageManager.PERMISSION_GRANTED) {
-            requestPermissions(
-                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION,
-                            Manifest.permission.ACCESS_COARSE_LOCATION},
-                    /*requestCode=*/1);
-            return;
-        }
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
-        fusedLocationClient.getLastLocation().addOnSuccessListener(this, this::setLocation);
+        getLastLocationAndStartLocationUpdate();
 
+    }
+
+    private void getLastLocationAndStartLocationUpdate() {
+        if (ActivityCompat.checkSelfPermission(this,
+                Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            requestPermissions(
+                    new String[]{Manifest.permission.ACCESS_COARSE_LOCATION,
+                            Manifest.permission.ACCESS_FINE_LOCATION},
+                    /*requestCode=*/1);
+        }
+        fusedLocationClient.getLastLocation().addOnSuccessListener(this, this::setLocation);
         locationCallback = new LocationCallback() {
             @Override
             public void onLocationResult(LocationResult locationResult) {
                 if (locationResult == null) {
                     return;
                 }
-                System.out.println("jerry here get location update "
-                        + locationResult.getLastLocation().toString());
                 onLocationChanged(locationResult.getLastLocation());
             }
         };
         locationRequest = locationRequest.create();
-        locationRequest.setInterval(1000);
-        locationRequest.setFastestInterval(50);
-        locationRequest.setPriority(Priority.PRIORITY_HIGH_ACCURACY);
+        boolean isHighPrecision = ActivityCompat
+                .checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) !=
+                PackageManager.PERMISSION_GRANTED;
+        // fine location granted using high precision
+        locationRequest.setInterval(locationUpdateInterval);
+        locationRequest.setFastestInterval(fastestInterval);
+        locationRequest.setPriority(precisionCode);
         fusedLocationClient.requestLocationUpdates(locationRequest,
                 locationCallback,
                 Looper.getMainLooper());
-
     }
 
     private void setLocation(Location location) {
@@ -95,7 +101,6 @@ public class LocationActivity extends AppCompatActivity {
         }
         latitudeValue = location.getLatitude();
         longitudeValue = location.getLongitude();
-        System.out.println("set location here here here ");
         currentLatitude.setText("Current latitude:" + latitudeValue);
         currentLongitude.setText("current longitude: " + longitudeValue);
         travelDistance.setText("total_distance:" + String.format("%.2f", distanceValue) + "M");
@@ -107,28 +112,52 @@ public class LocationActivity extends AppCompatActivity {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         switch (requestCode) {
             case 1:
-                // If request is cancelled, the result arrays are empty.
-                if (grantResults.length > 0 &&
-                        grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    // Permission is granted. Continue the action or workflow
-                    // in your app.
-                } else {
-                    // if permission is denied return to main activity
+                if (ActivityCompat
+                        .checkSelfPermission(
+                                this, Manifest.permission.ACCESS_COARSE_LOCATION)
+                        != PackageManager.PERMISSION_GRANTED) {
                     onBackPressed();
+                    return;
+                }
+                if (ActivityCompat
+                        .checkSelfPermission(
+                                this, Manifest.permission.ACCESS_FINE_LOCATION)
+                        != PackageManager.PERMISSION_GRANTED) {
+                    highPrecisionCheckBox.setChecked(false);
+                    fastestInterval = 500;
+                    locationUpdateInterval = 6000;
+                    precisionCode = Priority.PRIORITY_BALANCED_POWER_ACCURACY;
+                } else {
+                    fastestInterval = 50;
+                    locationUpdateInterval = 100;
+                    precisionCode = Priority.PRIORITY_HIGH_ACCURACY;
                 }
                 return;
+            case 2:
+                if (ActivityCompat
+                        .checkSelfPermission(
+                                this, Manifest.permission.ACCESS_FINE_LOCATION)
+                        != PackageManager.PERMISSION_GRANTED) {
+                    highPrecisionCheckBox.setChecked(false);
+                    fastestInterval = 500;
+                    locationUpdateInterval = 6000;
+                    precisionCode = Priority.PRIORITY_BALANCED_POWER_ACCURACY;
+                    CharSequence text = "High Precision Location permission not granted, " +
+                            "using low precision for now";
+                    int duration = Toast.LENGTH_SHORT;
+                    Toast toast = Toast.makeText(getApplicationContext(), text, duration);
+                    toast.show();
+                } else {
+                    fastestInterval = 50;
+                    locationUpdateInterval = 100;
+                    precisionCode = Priority.PRIORITY_HIGH_ACCURACY;
+                }
         }
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        startLocationUpdates();
-
-    }
-
-    private void startLocationUpdates() {
-
     }
 
     @Override
@@ -138,9 +167,10 @@ public class LocationActivity extends AppCompatActivity {
     }
 
     private void stopLocationUpdates() {
-        fusedLocationClient.removeLocationUpdates(locationCallback);
+        if (fusedLocationClient != null && locationCallback != null) {
+            fusedLocationClient.removeLocationUpdates(locationCallback);
+        }
     }
-
 
     public void onLocationChanged(Location location) {
         if (location == null) {
@@ -154,7 +184,6 @@ public class LocationActivity extends AppCompatActivity {
         float[] res = new float[1];
         Location.distanceBetween(latitudeValue, longitudeValue, newLatitude, newLongitude, res);
         distanceValue += res[0];
-
         latitudeValue = newLatitude;
         longitudeValue = newLongitude;
         currentLatitude.setText("Current latitude:" + latitudeValue);
@@ -171,6 +200,43 @@ public class LocationActivity extends AppCompatActivity {
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
+    }
+
+    public void resetDistance(View view) {
+        distanceValue = 0.0;
+        travelDistance.setText("total_distance:" + String.format("%.2f", distanceValue) + "M");
+    }
+
+    public void onHighPrecisionPress(View view) {
+        CheckBox checkBox = (CheckBox) view;
+        stopLocationUpdates();
+        // only start asking user for high precision permission when it is not granted
+        if (checkBox.isChecked() && ActivityCompat
+                .checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) !=
+                PackageManager.PERMISSION_GRANTED) {
+            requestPermissions(
+                    new String[]{
+                            Manifest.permission.ACCESS_FINE_LOCATION},
+                    /*requestCode=*/2);
+
+        } else if (checkBox.isChecked() && ActivityCompat
+                .checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) ==
+                PackageManager.PERMISSION_GRANTED) {
+            fastestInterval = 50;
+            locationUpdateInterval = 100;
+            precisionCode = Priority.PRIORITY_HIGH_ACCURACY;
+        } else {
+            fastestInterval = 500;
+            locationUpdateInterval = 6000;
+            precisionCode = Priority.PRIORITY_BALANCED_POWER_ACCURACY;
+        }
+        locationRequest.setInterval(locationUpdateInterval);
+        locationRequest.setFastestInterval(fastestInterval);
+        locationRequest.setPriority(precisionCode);
+        fusedLocationClient.requestLocationUpdates(locationRequest,
+                locationCallback,
+                Looper.getMainLooper());
+
     }
 }
 

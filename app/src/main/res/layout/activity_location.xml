@@ -12,8 +12,8 @@
         android:text="Current latitude:"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toTopOf="@+id/current_longitude"
-        android:layout_marginBottom="30dp"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="30dp"
         />
 
     <TextView
@@ -23,8 +23,8 @@
         android:text="current longitude:"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toTopOf="@+id/total_distance"
-        android:layout_marginBottom="30dp"
+        app:layout_constraintTop_toBottomOf="@+id/current_latitude"
+        android:layout_marginTop="30dp"
         />
 
     <TextView
@@ -34,7 +34,27 @@
         android:text="total_distance:"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toBottomOf="@+id/current_longitude"
-        android:layout_marginBottom="30dp"
+        app:layout_constraintTop_toBottomOf="@+id/current_longitude"
+        android:layout_marginTop="30dp"
         />
+
+    <CheckBox android:id="@+id/high_precision"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Enable High Precision Location"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/total_distance"
+        android:onClick="onHighPrecisionPress"
+        android:layout_marginTop="30dp"/>
+
+    <Button android:id="@+id/clear_distance"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Clear Distance"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/high_precision"
+        android:onClick="resetDistance"
+        android:layout_marginTop="30dp"/>
 </androidx.constraintlayout.widget.ConstraintLayout>
