@@ -9,35 +9,51 @@
         android:layout_height="wrap_content"
         android:text="Get Dog"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         android:onClick="randomGetDogOnClick"
         android:textSize="10sp"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="20dp"
         />
-    <Button
-        android:id="@+id/random_dog_by_breed"
+    <TextView
+        android:id="@+id/breed_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Get Dog by Breed"
-        app:layout_constraintStart_toEndOf="@+id/random_dog"
         app:layout_constraintEnd_toStartOf="@+id/breed_spinner"
-        app:layout_constraintTop_toTopOf="parent"
-        android:onClick="breedButtonOnClick"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/breed_spinner"
         android:textSize="10sp"
-        />
+        android:text="Choose a breed"/>
     <Spinner
         android:id="@+id/breed_spinner"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:textSize="10sp"/>
+        app:layout_constraintStart_toEndOf="@+id/breed_text"
+        app:layout_constraintTop_toBottomOf="@+id/random_dog"
+        android:textSize="10sp"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="20dp"/>
+    <Button
+        android:id="@+id/random_dog_by_breed"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Get Dog by Breed"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/breed_spinner"
+        android:onClick="breedButtonOnClick"
+        android:textSize="10sp"
+        android:layout_marginBottom="40dp"
+        />
     <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/dog"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/random_dog"
+        app:layout_constraintTop_toBottomOf="@+id/random_dog_by_breed"
         android:layout_marginTop="20px"
         />
 </androidx.constraintlayout.widget.ConstraintLayout>
