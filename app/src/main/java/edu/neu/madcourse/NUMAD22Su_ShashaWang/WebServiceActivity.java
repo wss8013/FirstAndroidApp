@@ -12,7 +12,6 @@ import android.widget.Spinner;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -39,10 +38,9 @@ public class WebServiceActivity extends AppCompatActivity {
         breedSpinner = findViewById(R.id.breed_spinner);
         new DownloadBreedTask(breedSpinner, this.getApplicationContext())
                 .execute("https://dog.ceo/api/breeds/list/all");
-
     }
 
-    public void onClickSendRequest(View view) {
+    public void randomGetDogOnClick(View view) {
         SampleWebServiceTask webServiceTask = new SampleWebServiceTask();
         webServiceTask.execute("https://dog.ceo/api/breeds/image/random");
     }

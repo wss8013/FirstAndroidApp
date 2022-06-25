@@ -10,7 +10,7 @@
         android:text="Get Dog"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:onClick="onClickSendRequest"
+        android:onClick="randomGetDogOnClick"
         android:textSize="10sp"
         />
     <Button
