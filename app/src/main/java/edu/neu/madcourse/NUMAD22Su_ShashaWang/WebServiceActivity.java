@@ -1,59 +1,187 @@
 package edu.neu.madcourse.NUMAD22Su_ShashaWang;
 
+import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.ImageView;
+import android.widget.Spinner;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Scanner;
 
 import javax.net.ssl.HttpsURLConnection;
 
 public class WebServiceActivity extends AppCompatActivity {
+    ImageView dogImage;
+    Spinner breedSpinner;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_web_service);
+        dogImage = findViewById(R.id.dog);
+        breedSpinner = findViewById(R.id.breed_spinner);
+        new DownloadBreedTask(breedSpinner, this.getApplicationContext())
+                .execute("https://dog.ceo/api/breeds/list/all");
+
     }
 
     public void onClickSendRequest(View view) {
         SampleWebServiceTask webServiceTask = new SampleWebServiceTask();
-        webServiceTask.execute("https://api.genderize.io?name=peter");
+        webServiceTask.execute("https://dog.ceo/api/breeds/image/random");
     }
 
-    private class SampleWebServiceTask extends AsyncTask<String,Integer, String> {
-
+    private class SampleWebServiceTask extends AsyncTask<String, Integer, String> {
         @Override
-        protected void onProgressUpdate(Integer...value) {}
+        protected void onProgressUpdate(Integer... value) {
+        }
+
         @Override
         protected String doInBackground(String... params) {
             URL url;
+            String dogUrl = "";
             try {
-                url= new URL(params[0]);
+                url = new URL(params[0]);
                 HttpsURLConnection conn = (HttpsURLConnection) url.openConnection();
                 conn.setRequestMethod("GET");
                 conn.setDoInput(true);
-
                 InputStream is = conn.getInputStream();
-
                 final String res = convertStreamToString(is);
-                System.out.println("jerry \n\n"+res);
+                JSONObject jsonObject = new JSONObject(res);
+                dogUrl = jsonObject.getString("message");
+                System.out.println(dogUrl);
+                System.out.println("jerry \n\n" + res);
             } catch (MalformedURLException e) {
                 e.printStackTrace();
             } catch (IOException e) {
                 e.printStackTrace();
+            } catch (JSONException e) {
+                e.printStackTrace();
             }
+            return dogUrl;
+        }
 
-            return null;
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+            new DownloadImageTask(dogImage).execute(s);
         }
     }
-    private String convertStreamToString (InputStream is) {
+
+    private class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
+        ImageView bmImage;
+
+        public DownloadImageTask(ImageView bmImage) {
+            this.bmImage = bmImage;
+        }
+
+        @Override
+        protected Bitmap doInBackground(String... urls) {
+            System.out.println("start downloading url " + urls[0]);
+            String urlDisplay = urls[0];
+            try {
+                URL urlConnection = new URL(urlDisplay);
+                HttpsURLConnection connection = (HttpsURLConnection) urlConnection
+                        .openConnection();
+                connection.setDoInput(true);
+                connection.connect();
+                InputStream input = connection.getInputStream();
+                Bitmap myBitmap = BitmapFactory.decodeStream(input);
+                return myBitmap;
+            } catch (Exception e) {
+                System.out.println("jerry ====== " + e.getMessage());
+                e.printStackTrace();
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Bitmap result) {
+            super.onPostExecute(result);
+            bmImage.setImageBitmap(result);
+        }
+    }
+
+    private class DownloadBreedTask extends AsyncTask<String, Void, String[]> {
+        Spinner breedSpinner;
+        Context context;
+
+        public DownloadBreedTask(Spinner spinner, Context context) {
+            this.breedSpinner = spinner;
+            this.context = context;
+        }
+
+        @Override
+        protected String[] doInBackground(String... urls) {
+            System.out.println("start downloading bread list " + urls[0]);
+            String resStrArray[];
+            String urlDisplay = urls[0];
+
+            try {
+                URL urlConnection = new URL(urlDisplay);
+                HttpsURLConnection connection = (HttpsURLConnection) urlConnection
+                        .openConnection();
+                connection.setDoInput(true);
+                connection.connect();
+                InputStream input = connection.getInputStream();
+                String resStr = convertStreamToString(input);
+                System.out.println(resStr);
+
+                List<String> resList = new ArrayList<>();
+                JSONObject object = new JSONObject(resStr);
+                JSONObject message = object.getJSONObject("message");
+                Iterator<String> keys = message.keys();
+                while (keys.hasNext()) {
+                    resList.add(keys.next());
+                }
+                resStrArray = new String[resList.size()];
+                for (int i = 0; i < resStrArray.length; i++) {
+                    resStrArray[i] = resList.get(i);
+                }
+
+            } catch (Exception e) {
+                resStrArray = new String[0];
+                System.out.println("jerry ====== " + e.getMessage());
+                e.printStackTrace();
+            }
+            return resStrArray;
+        }
+
+        @Override
+        protected void onPostExecute(String[] result) {
+            super.onPostExecute(result);
+            ArrayAdapter<String> adapter
+                    = new ArrayAdapter<>
+                    (context, androidx.appcompat.R.layout.support_simple_spinner_dropdown_item, result);
+            breedSpinner.setAdapter(adapter);
+
+        }
+    }
+
+    private String convertStreamToString(InputStream is) {
         Scanner s = new Scanner(is).useDelimiter("\\A");
-        return s.hasNext()?s.next().replace(",","\n"):"";
+        return s.hasNext() ? s.next() : "";
+    }
+
+    public void breedButtonOnClick(View view) {
+        String breed = breedSpinner.getSelectedItem().toString();
+        System.out.println("the breed is " + breed);
+        new SampleWebServiceTask().execute("https://dog.ceo/api/breed/" + breed + "/images/random");
     }
 }
