@@ -41,11 +41,11 @@ public class WebServiceActivity extends AppCompatActivity {
     }
 
     public void randomGetDogOnClick(View view) {
-        SampleWebServiceTask webServiceTask = new SampleWebServiceTask();
+        GetDogTask webServiceTask = new GetDogTask();
         webServiceTask.execute("https://dog.ceo/api/breeds/image/random");
     }
 
-    private class SampleWebServiceTask extends AsyncTask<String, Integer, String> {
+    private class GetDogTask extends AsyncTask<String, Integer, String> {
         @Override
         protected void onProgressUpdate(Integer... value) {
         }
@@ -63,8 +63,6 @@ public class WebServiceActivity extends AppCompatActivity {
                 final String res = convertStreamToString(is);
                 JSONObject jsonObject = new JSONObject(res);
                 dogUrl = jsonObject.getString("message");
-                System.out.println(dogUrl);
-                System.out.println("jerry \n\n" + res);
             } catch (MalformedURLException e) {
                 e.printStackTrace();
             } catch (IOException e) {
@@ -91,8 +89,8 @@ public class WebServiceActivity extends AppCompatActivity {
 
         @Override
         protected Bitmap doInBackground(String... urls) {
-            System.out.println("start downloading url " + urls[0]);
             String urlDisplay = urls[0];
+            Bitmap myBitmap = null;
             try {
                 URL urlConnection = new URL(urlDisplay);
                 HttpsURLConnection connection = (HttpsURLConnection) urlConnection
@@ -100,13 +98,11 @@ public class WebServiceActivity extends AppCompatActivity {
                 connection.setDoInput(true);
                 connection.connect();
                 InputStream input = connection.getInputStream();
-                Bitmap myBitmap = BitmapFactory.decodeStream(input);
-                return myBitmap;
+                myBitmap = BitmapFactory.decodeStream(input);
             } catch (Exception e) {
-                System.out.println("jerry ====== " + e.getMessage());
                 e.printStackTrace();
             }
-            return null;
+            return myBitmap;
         }
 
         @Override
@@ -130,7 +126,6 @@ public class WebServiceActivity extends AppCompatActivity {
             System.out.println("start downloading bread list " + urls[0]);
             String resStrArray[];
             String urlDisplay = urls[0];
-
             try {
                 URL urlConnection = new URL(urlDisplay);
                 HttpsURLConnection connection = (HttpsURLConnection) urlConnection
@@ -139,8 +134,6 @@ public class WebServiceActivity extends AppCompatActivity {
                 connection.connect();
                 InputStream input = connection.getInputStream();
                 String resStr = convertStreamToString(input);
-                System.out.println(resStr);
-
                 List<String> resList = new ArrayList<>();
                 JSONObject object = new JSONObject(resStr);
                 JSONObject message = object.getJSONObject("message");
@@ -152,10 +145,8 @@ public class WebServiceActivity extends AppCompatActivity {
                 for (int i = 0; i < resStrArray.length; i++) {
                     resStrArray[i] = resList.get(i);
                 }
-
             } catch (Exception e) {
                 resStrArray = new String[0];
-                System.out.println("jerry ====== " + e.getMessage());
                 e.printStackTrace();
             }
             return resStrArray;
@@ -168,7 +159,6 @@ public class WebServiceActivity extends AppCompatActivity {
                     = new ArrayAdapter<>
                     (context, androidx.appcompat.R.layout.support_simple_spinner_dropdown_item, result);
             breedSpinner.setAdapter(adapter);
-
         }
     }
 
@@ -179,7 +169,6 @@ public class WebServiceActivity extends AppCompatActivity {
 
     public void breedButtonOnClick(View view) {
         String breed = breedSpinner.getSelectedItem().toString();
-        System.out.println("the breed is " + breed);
-        new SampleWebServiceTask().execute("https://dog.ceo/api/breed/" + breed + "/images/random");
+        new GetDogTask().execute("https://dog.ceo/api/breed/" + breed + "/images/random");
     }
 }
