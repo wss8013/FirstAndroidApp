@@ -21,6 +21,7 @@ public class MainActivity extends AppCompatActivity {
         Button linkCollector = findViewById(R.id.link_collector);
         Button findPrime = findViewById(R.id.prime);
         Button location = findViewById(R.id.location);
+        Button webService = findViewById(R.id.web_service);
 
         aboutMe.setOnClickListener(v -> {
             Intent intent = new Intent(this, AboutMeActivity.class);
@@ -44,6 +45,11 @@ public class MainActivity extends AppCompatActivity {
 
         location.setOnClickListener(v->{
             Intent intent = new Intent(this, LocationActivity.class);
+            startActivity(intent);
+        });
+
+        webService.setOnClickListener(v-> {
+            Intent intent = new Intent(this, WebServiceActivity.class);
             startActivity(intent);
         });
     }

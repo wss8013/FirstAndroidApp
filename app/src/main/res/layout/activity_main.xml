@@ -44,4 +44,10 @@
         android:layout_height="wrap_content"
         android:text="Location"
         />
+    <Button
+        android:id="@+id/web_service"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Web Service"
+        />
 </androidx.appcompat.widget.LinearLayoutCompat>
