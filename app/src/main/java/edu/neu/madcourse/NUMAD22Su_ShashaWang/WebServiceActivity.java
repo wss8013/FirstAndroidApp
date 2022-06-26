@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.Spinner;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -29,6 +30,7 @@ import javax.net.ssl.HttpsURLConnection;
 public class WebServiceActivity extends AppCompatActivity {
     ImageView dogImage;
     Spinner breedSpinner;
+    ProgressBar progressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,19 +38,22 @@ public class WebServiceActivity extends AppCompatActivity {
         setContentView(R.layout.activity_web_service);
         dogImage = findViewById(R.id.dog);
         breedSpinner = findViewById(R.id.breed_spinner);
+        progressBar = findViewById(R.id.loading_bar);
+//        progressBar.setVisibility(View.VISIBLE);
+//        dogImage.setVisibility(View.GONE);
         new DownloadBreedTask(breedSpinner, this.getApplicationContext())
                 .execute("https://dog.ceo/api/breeds/list/all");
+
     }
 
     public void randomGetDogOnClick(View view) {
         GetDogTask webServiceTask = new GetDogTask();
+        progressBar.setVisibility(View.VISIBLE);
+        dogImage.setVisibility(View.GONE);
         webServiceTask.execute("https://dog.ceo/api/breeds/image/random");
     }
 
     private class GetDogTask extends AsyncTask<String, Integer, String> {
-        @Override
-        protected void onProgressUpdate(Integer... value) {
-        }
 
         @Override
         protected String doInBackground(String... params) {
@@ -82,7 +87,6 @@ public class WebServiceActivity extends AppCompatActivity {
 
     private class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
         ImageView bmImage;
-
         public DownloadImageTask(ImageView bmImage) {
             this.bmImage = bmImage;
         }
@@ -108,7 +112,10 @@ public class WebServiceActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(Bitmap result) {
             super.onPostExecute(result);
+            progressBar.setVisibility(View.GONE);
+            bmImage.setVisibility(View.VISIBLE);
             bmImage.setImageBitmap(result);
+
         }
     }
 
@@ -169,6 +176,8 @@ public class WebServiceActivity extends AppCompatActivity {
 
     public void breedButtonOnClick(View view) {
         String breed = breedSpinner.getSelectedItem().toString();
+        progressBar.setVisibility(View.VISIBLE);
+        dogImage.setVisibility(View.GONE);
         new GetDogTask().execute("https://dog.ceo/api/breed/" + breed + "/images/random");
     }
 }
